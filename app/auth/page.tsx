@@ -4,12 +4,22 @@ import { MeshGradient } from "@paper-design/shaders-react"
 import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
+import { useAuth } from "@/context/auth-context"
 
 export default function AuthPage() {
   const [dimensions, setDimensions] = useState({ width: 1920, height: 1080 })
   const [mounted, setMounted] = useState(false)
   const supabase = createClient()
+  const { user, loading } = useAuth()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!loading && user) {
+      router.replace("/dashboard")
+    }
+  }, [user, loading, router])
 
   useEffect(() => {
     setMounted(true)
@@ -68,7 +78,7 @@ export default function AuthPage() {
                   className="rounded-md"
                 />
               </div>
-              <span 
+              <span
                 className="text-xl font-bold text-foreground tracking-tighter"
                 style={{ fontFamily: 'var(--font-indie-flower)' }}
               >

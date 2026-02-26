@@ -14,7 +14,7 @@ export default function AuthCallback() {
       if (error) {
         console.error('Error in auth callback:', error)
       }
-      router.push('/')
+      router.push('/dashboard')
     }
 
     handleAuth()

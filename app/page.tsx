@@ -1,10 +1,22 @@
 "use client"
 
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { useAuth } from "@/context/auth-context"
 import { HeroSection } from "@/components/main/hero"
 
 export default function Home() {
+  const { user, loading } = useAuth()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!loading && user) {
+      router.replace("/dashboard")
+    }
+  }, [user, loading, router])
+
   const handleStart = () => {
-    console.log("Starting nAILART ai journey...")
+    router.push("/auth")
   }
 
   return (

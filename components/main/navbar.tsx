@@ -3,14 +3,21 @@
 import Image from "next/image"
 import Link from "next/link"
 import { useAuth } from "@/context/auth-context"
+import { usePathname } from "next/navigation"
 
 export function Navbar() {
   const { user, signOut } = useAuth()
+  const pathname = usePathname()
+
+  // /auth 페이지나 /dashboard 페이지에서는 Navbar 숨김
+  if (pathname === "/auth" || pathname?.startsWith("/dashboard")) return null
+
+  const logoHref = user ? "/dashboard" : "/"
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 bg-background/50 backdrop-blur-md border-b border-white/10">
       <div className="flex items-center gap-2">
-        <Link href="/" className="flex items-center gap-2">
+        <Link href={logoHref} className="flex items-center gap-2">
           <Image
             src="/icon.png"
             alt="NAILART ai Logo"
@@ -39,9 +46,12 @@ export function Navbar() {
       <div className="flex items-center gap-4">
         {user ? (
           <>
-            <span className="text-sm font-medium text-foreground/80">
-              {user.user_metadata?.full_name || user.email}
-            </span>
+            <Link
+              href="/dashboard"
+              className="px-5 py-2.5 rounded-full bg-white/10 text-foreground text-sm font-semibold hover:bg-white/20 transition-colors"
+            >
+              Dashboard
+            </Link>
             <button
               onClick={() => signOut()}
               className="px-5 py-2.5 rounded-full bg-white/10 text-foreground text-sm font-semibold hover:bg-white/20 transition-colors"
